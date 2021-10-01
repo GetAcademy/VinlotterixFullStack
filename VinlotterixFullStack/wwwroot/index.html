@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="css/vinlotterix.css" />
+    <script src="js/model.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/personer.js"></script>
+    <script src="js/vinnere.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+    <div class="page" id="page">
+        <div class="header" id="header">
+            <button class="knapp" onclick="visOgSkjulMeny()">☰</button> Vinlotterix 🍷
+        </div>
+        <div class="innhold" id="innhold"></div>
+        <div class="meny" id="meny">
+            <button class="knapp fixed" onclick="visPersoner()">Personer</button><br />
+            <button class="knapp fixed" onclick="visTrekninger()">Vinnere</button><br />
+        </div>
+    </div>
+    <script>
+        getData();
+
+        function visOgSkjulMeny() {
+            document.getElementById('page').classList.toggle('pageUtenMeny');
+        }
+
+        async function getData() {
+            let response = await axios.get('/api/person');
+            let people = response.data;
+            for (let person of people) {
+                model.personer.liste.push({
+                    id: person.id,
+                    navn: person.name,
+                    erValgt: true,
+                });
+            }
+            visPersoner();
+        }
+
+        async function addTerje() {
+            let person = {name: 'Terje'};
+            let response = await axios.post('/api/person', person);
+        }
+    </script>
+</body>
+</html>
